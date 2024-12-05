@@ -1,9 +1,9 @@
 import java.io.IOException;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         HistorianHysteria historianHysteria = new HistorianHysteria();
-        URLReader urlReader = new URLReader("https://adventofcode.com/2024/day/1/input");
-        System.out.println("Hello world!");
+        System.out.printf("Day 1 Part one: %d \n", historianHysteria.getTotalDistance());
+        System.out.printf("Day 1 Part two: %d \n", 0);
     }
 }

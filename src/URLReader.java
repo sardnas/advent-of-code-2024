@@ -8,18 +8,28 @@ import java.util.Properties;
 
 public class URLReader {
 
-    public URLReader(String urlString) {
+    private String sessionCookie;
+
+    // Constructor to initialize session cookie from config
+    public URLReader() {
         try {
             Properties props = new Properties();
             try (InputStream input = new FileInputStream("config.properties")) {
                 props.load(input);
             }
-
-            String sessionCookie = props.getProperty("session_cookie");
+            sessionCookie = props.getProperty("session_cookie");
             if (sessionCookie == null || sessionCookie.isEmpty()) {
                 throw new IllegalArgumentException("Session cookie not found in config file");
             }
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to initialize URLReader", e);
+        }
+    }
 
+    // Method to fetch data from a URL
+    public String getData(String urlString) {
+        StringBuilder response = new StringBuilder();
+        try {
             URL url = new URL(urlString);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
@@ -27,17 +37,18 @@ public class URLReader {
 
             int responseCode = connection.getResponseCode();
             if (responseCode == HttpURLConnection.HTTP_OK) {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    System.out.println(line);
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        response.append(line).append("\n");
+                    }
                 }
-                reader.close();
             } else {
-                System.out.println("Failed to fetch data. HTTP response code: " + responseCode);
+                throw new RuntimeException("Failed to fetch data. HTTP response code: " + responseCode);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException("Error fetching data from URL", e);
         }
+        return response.toString();
     }
 }
