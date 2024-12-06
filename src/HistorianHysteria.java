@@ -21,6 +21,27 @@ public class HistorianHysteria {
         return calculateDistance().stream().mapToInt(Integer::intValue).sum();
     }
 
+    public int getSimilarityScore(){
+
+        ArrayList<Integer> leftList = createLeftList();
+        ArrayList<Integer> rightList = createRightList();
+
+        int score = 0;
+        ArrayList<Integer> numbersAlreadyChecked = new ArrayList<>();
+
+        for(Integer number : leftList){
+            if(!numbersAlreadyChecked.contains(number)){
+                numbersAlreadyChecked.add(number);
+                score += (int) (rightList.stream()
+                                        .filter(x -> x.equals(number))
+                                        .count() * number);
+
+            }
+        }
+
+        return score;
+    }
+
     private ArrayList<Integer> calculateDistance(){
         ArrayList<Integer> leftList = createLeftList();
         ArrayList<Integer> rightList = createRightList();
@@ -37,6 +58,7 @@ public class HistorianHysteria {
         }
         return distanceArray;
     }
+
 
     private ArrayList<Integer> createLeftList() {
         ArrayList<Integer> list = new ArrayList<>();
