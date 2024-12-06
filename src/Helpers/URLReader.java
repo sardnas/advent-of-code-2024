@@ -1,3 +1,5 @@
+package Helpers;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -22,7 +24,7 @@ public class URLReader {
                 throw new IllegalArgumentException("Session cookie not found in config file");
             }
         } catch (Exception e) {
-            throw new RuntimeException("Failed to initialize URLReader", e);
+            throw new RuntimeException("Failed to initialize Helpers.URLReader", e);
         }
     }
 
